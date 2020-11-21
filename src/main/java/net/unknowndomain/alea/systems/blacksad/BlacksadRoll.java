@@ -50,6 +50,10 @@ public class BlacksadRoll implements GenericRoll
     public BlacksadRoll(Integer action, Integer tension, Collection<Modifiers> mod)
     {
         this.mods = new HashSet<>();
+        if (mod != null)
+        {
+            this.mods.addAll(mod);
+        }
         this.actionPool = new DicePool<>(D6.INSTANCE, action);
         this.tensionPool = new DicePool<>(D6.INSTANCE, tension);
         int complimentary = (action + tension) >= 6 ? 0 : 6 - action - tension;

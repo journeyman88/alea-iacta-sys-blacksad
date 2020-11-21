@@ -22,7 +22,7 @@
         </dependency>
     </dependencies>
     
-    <name>Alea Iacta Est - System: Blacksad</name>
+    <name>Alea Iacta Est - System: Blacksad RPG</name>
     <description>
         The system specific implementation to support the RPG "Blacksad"
     </description>

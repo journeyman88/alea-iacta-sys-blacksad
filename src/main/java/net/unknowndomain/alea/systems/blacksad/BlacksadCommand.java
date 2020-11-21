@@ -40,10 +40,10 @@ import org.slf4j.LoggerFactory;
 public class BlacksadCommand extends RpgSystemCommand
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacksadCommand.class);
-    private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("Blacksad", "sad", "blacksad");
+    private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("Blacksad RPG", "sad", "blacksad");
     
     private static final String ACTION_PARAM = "ability";
-    private static final String TENSION_PARAM = "tesnsion";
+    private static final String TENSION_PARAM = "tension";
     
     private static final Options CMD_OPTIONS;
     
