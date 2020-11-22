@@ -16,6 +16,7 @@
 package net.unknowndomain.alea.systems.blacksad;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import net.unknowndomain.alea.command.HelpWrapper;
 import net.unknowndomain.alea.messages.ReturnMsg;
@@ -96,13 +97,9 @@ public class BlacksadCommand extends RpgSystemCommand
     }
     
     @Override
-    protected ReturnMsg safeCommand(String cmdName, String cmdParams)
+    protected Optional<GenericRoll> safeCommand(String cmdParams)
     {
-        ReturnMsg retVal;
-        if (cmdParams == null || cmdParams.isEmpty())
-        {
-            return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
-        }
+        Optional<GenericRoll> retVal;
         try
         {
             CommandLineParser parser = new DefaultParser();
@@ -112,7 +109,7 @@ public class BlacksadCommand extends RpgSystemCommand
                     cmd.hasOption(CMD_HELP)
                 )
             {
-                return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+                return Optional.empty();
             }
 
 
@@ -132,13 +129,19 @@ public class BlacksadCommand extends RpgSystemCommand
                 a = Integer.parseInt(cmd.getOptionValue(ACTION_PARAM));
             }
             GenericRoll roll = new BlacksadRoll(a, t, mods);
-            retVal = roll.getResult();
+            retVal = Optional.of(roll);
         } 
         catch (ParseException | NumberFormatException ex)
         {
-            retVal = HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+            retVal = Optional.empty();
         }
         return retVal;
+    }
+    
+    @Override
+    public ReturnMsg getHelpMessage(String cmdName)
+    {
+        return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
     }
     
 }

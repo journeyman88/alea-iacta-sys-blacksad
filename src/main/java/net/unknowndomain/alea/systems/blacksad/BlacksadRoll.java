@@ -20,10 +20,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.unknowndomain.alea.dice.D6;
-import net.unknowndomain.alea.messages.MsgBuilder;
-import net.unknowndomain.alea.messages.ReturnMsg;
+import net.unknowndomain.alea.dice.standard.D6;
 import net.unknowndomain.alea.pools.DicePool;
+import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
 /**
@@ -62,50 +61,14 @@ public class BlacksadRoll implements GenericRoll
     }
     
     @Override
-    public ReturnMsg getResult()
+    public GenericResult getResult()
     {
         List<Integer> actionRes = this.actionPool.getResults();
         List<Integer> tensionRes = this.tensionPool.getResults();
         List<Integer> complimentaryRes = this.complimentaryPool.getResults();
         BlacksadResults results = buildResults(actionRes, tensionRes, complimentaryRes);
-        return formatResults(results);
-    }
-    
-    private ReturnMsg formatResults(BlacksadResults results)
-    {
-        MsgBuilder mb = new MsgBuilder();
-        mb.append("Successes: ").append(results.getSuccesses()).appendNewLine();
-        if (mods.contains(Modifiers.VERBOSE))
-        {
-            if (!results.getActionResults().isEmpty())
-            {
-                mb.append("Action Dice Results: ").append(" [ ");
-                for (Integer t : results.getActionResults())
-                {
-                    mb.append(t).append(" ");
-                }
-                mb.append("]").appendNewLine();
-            }
-            if (!results.getTensionResults().isEmpty())
-            {
-                mb.append("Tension Dice Results: ").append(" [ ");
-                for (Integer t : results.getTensionResults())
-                {
-                    mb.append(t).append(" ");
-                }
-                mb.append("]").appendNewLine();
-            }
-            if (!results.getComplimentaryResults().isEmpty())
-            {
-                mb.append("Complimentary Dice Results: ").append(" [ ");
-                for (Integer t : results.getComplimentaryResults())
-                {
-                    mb.append(t).append(" ");
-                }
-                mb.append("]").appendNewLine();
-            }
-        }
-        return mb.build();
+        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        return results;
     }
     
     private BlacksadResults buildResults(List<Integer> actionRes, List<Integer> tensionRes, List<Integer> complimentaryRes)

@@ -18,12 +18,14 @@ package net.unknowndomain.alea.systems.blacksad;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.roll.GenericResult;
 
 /**
  *
  * @author journeyman
  */
-public class BlacksadResults
+public class BlacksadResults extends GenericResult
 {
     private final List<Integer> actionResults;
     private final List<Integer> tensionResults;
@@ -66,6 +68,42 @@ public class BlacksadResults
     public List<Integer> getTensionResults()
     {
         return tensionResults;
+    }
+
+    @Override
+    protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
+    {
+        messageBuilder.append("Successes: ").append(getSuccesses()).appendNewLine();
+        if (verbose)
+        {
+            if (!getActionResults().isEmpty())
+            {
+                messageBuilder.append("Action Dice Results: ").append(" [ ");
+                for (Integer t : getActionResults())
+                {
+                    messageBuilder.append(t).append(" ");
+                }
+                messageBuilder.append("]").appendNewLine();
+            }
+            if (!getTensionResults().isEmpty())
+            {
+                messageBuilder.append("Tension Dice Results: ").append(" [ ");
+                for (Integer t : getTensionResults())
+                {
+                    messageBuilder.append(t).append(" ");
+                }
+                messageBuilder.append("]").appendNewLine();
+            }
+            if (!getComplimentaryResults().isEmpty())
+            {
+                messageBuilder.append("Complimentary Dice Results: ").append(" [ ");
+                for (Integer t : getComplimentaryResults())
+                {
+                    messageBuilder.append(t).append(" ");
+                }
+                messageBuilder.append("]").appendNewLine();
+            }
+        }
     }
 
 }
