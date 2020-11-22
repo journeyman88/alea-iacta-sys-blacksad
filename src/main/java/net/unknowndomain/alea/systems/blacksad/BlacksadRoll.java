@@ -21,9 +21,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.unknowndomain.alea.dice.D6;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.pools.DicePool;
 import net.unknowndomain.alea.roll.GenericRoll;
-import org.javacord.api.entity.message.MessageBuilder;
 
 /**
  *
@@ -61,7 +62,7 @@ public class BlacksadRoll implements GenericRoll
     }
     
     @Override
-    public MessageBuilder getResult()
+    public ReturnMsg getResult()
     {
         List<Integer> actionRes = this.actionPool.getResults();
         List<Integer> tensionRes = this.tensionPool.getResults();
@@ -70,9 +71,9 @@ public class BlacksadRoll implements GenericRoll
         return formatResults(results);
     }
     
-    private MessageBuilder formatResults(BlacksadResults results)
+    private ReturnMsg formatResults(BlacksadResults results)
     {
-        MessageBuilder mb = new MessageBuilder();
+        MsgBuilder mb = new MsgBuilder();
         mb.append("Successes: ").append(results.getSuccesses()).appendNewLine();
         if (mods.contains(Modifiers.VERBOSE))
         {
@@ -104,7 +105,7 @@ public class BlacksadRoll implements GenericRoll
                 mb.append("]").appendNewLine();
             }
         }
-        return mb;
+        return mb.build();
     }
     
     private BlacksadResults buildResults(List<Integer> actionRes, List<Integer> tensionRes, List<Integer> complimentaryRes)
