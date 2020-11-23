@@ -73,9 +73,11 @@ public class BlacksadResults extends GenericResult
     @Override
     protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
     {
+        String indent = getIndent(indentValue);
         messageBuilder.append("Successes: ").append(getSuccesses()).appendNewLine();
         if (verbose)
         {
+            messageBuilder.append(indent).append("Roll ID: ").append(getUuid()).appendNewLine();
             if (!getActionResults().isEmpty())
             {
                 messageBuilder.append("Action Dice Results: ").append(" [ ");
