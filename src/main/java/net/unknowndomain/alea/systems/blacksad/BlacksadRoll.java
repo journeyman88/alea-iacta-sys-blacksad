@@ -32,31 +32,35 @@ import net.unknowndomain.alea.roll.GenericRoll;
 public class BlacksadRoll implements GenericRoll
 {
     
-    public enum Modifiers
-    {
-        VERBOSE
-    }
-    
     private final DicePool<D6> actionPool;
     private final DicePool<D6> tensionPool;
     private final DicePool<D6> complimentaryPool;
-    private final Set<Modifiers> mods;
+    private final Set<BlacksadModifiers> mods;
     
-    public BlacksadRoll(Integer action, Integer tension, Modifiers ... mod)
+    public BlacksadRoll(Integer action, Integer tension, BlacksadModifiers ... mod)
     {
         this(action, tension, Arrays.asList(mod));
     }
     
-    public BlacksadRoll(Integer action, Integer tension, Collection<Modifiers> mod)
+    public BlacksadRoll(Integer action, Integer tension, Collection<BlacksadModifiers> mod)
     {
+        int a = 0, t = 0;
+        if (action != null)
+        {
+            a = action;
+        }
+        if (tension != null)
+        {
+            t = tension;
+        }
         this.mods = new HashSet<>();
         if (mod != null)
         {
             this.mods.addAll(mod);
         }
-        this.actionPool = new DicePool<>(D6.INSTANCE, action);
-        this.tensionPool = new DicePool<>(D6.INSTANCE, tension);
-        int complimentary = (action + tension) >= 6 ? 0 : 6 - action - tension;
+        this.actionPool = new DicePool<>(D6.INSTANCE, a);
+        this.tensionPool = new DicePool<>(D6.INSTANCE, t);
+        int complimentary = (action + tension) >= 6 ? 0 : 6 - a - t;
         this.complimentaryPool = new DicePool<>(D6.INSTANCE, complimentary);
     }
     
@@ -67,7 +71,7 @@ public class BlacksadRoll implements GenericRoll
         List<Integer> tensionRes = this.tensionPool.getResults();
         List<Integer> complimentaryRes = this.complimentaryPool.getResults();
         BlacksadResults results = buildResults(actionRes, tensionRes, complimentaryRes);
-        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        results.setVerbose(mods.contains(BlacksadModifiers.VERBOSE));
         return results;
     }
     

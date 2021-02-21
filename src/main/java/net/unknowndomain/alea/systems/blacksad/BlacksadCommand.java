@@ -15,20 +15,12 @@
  */
 package net.unknowndomain.alea.systems.blacksad;
 
-import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
-import net.unknowndomain.alea.command.HelpWrapper;
-import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.systems.RpgSystemCommand;
 import net.unknowndomain.alea.systems.RpgSystemDescriptor;
 import net.unknowndomain.alea.roll.GenericRoll;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import net.unknowndomain.alea.systems.RpgSystemOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,44 +32,6 @@ public class BlacksadCommand extends RpgSystemCommand
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlacksadCommand.class);
     private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("Blacksad RPG", "sad", "blacksad");
-    
-    private static final String ACTION_PARAM = "action";
-    private static final String TENSION_PARAM = "tension";
-    
-    private static final Options CMD_OPTIONS;
-    
-    static {
-        
-        CMD_OPTIONS = new Options();
-        CMD_OPTIONS.addOption(
-                Option.builder("a")
-                        .longOpt(ACTION_PARAM)
-                        .desc("Number of action dice to roll")
-                        .hasArg()
-                        .argName("actionDice")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("t")
-                        .longOpt(TENSION_PARAM)
-                        .desc("Number of tension dice to roll")
-                        .hasArg()
-                        .argName("tensionDice")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("h")
-                        .longOpt( CMD_HELP )
-                        .desc( "Print help")
-                        .build()
-        );
-        CMD_OPTIONS.addOption(
-                Option.builder("v")
-                        .longOpt(CMD_VERBOSE)
-                        .desc("Enable verbose output")
-                        .build()
-        );
-    }
     
     public BlacksadCommand()
     {
@@ -95,53 +49,28 @@ public class BlacksadCommand extends RpgSystemCommand
     {
         return LOGGER;
     }
-    
+
     @Override
-    protected Optional<GenericRoll> safeCommand(String cmdParams)
+    protected Optional<GenericRoll> safeCommand(RpgSystemOptions options, Locale lang)
     {
         Optional<GenericRoll> retVal;
-        try
-        {
-            CommandLineParser parser = new DefaultParser();
-            CommandLine cmd = parser.parse(CMD_OPTIONS, cmdParams.split(" "));
-
-            if (
-                    cmd.hasOption(CMD_HELP)
-                )
-            {
-                return Optional.empty();
-            }
-
-
-            Set<BlacksadRoll.Modifiers> mods = new HashSet<>();
-
-            int a = 0, t = 0;
-            if (cmd.hasOption(CMD_VERBOSE))
-            {
-                mods.add(BlacksadRoll.Modifiers.VERBOSE);
-            }
-            if (cmd.hasOption(TENSION_PARAM))
-            {
-                t = Integer.parseInt(cmd.getOptionValue(TENSION_PARAM));
-            }
-            if (cmd.hasOption(ACTION_PARAM))
-            {
-                a = Integer.parseInt(cmd.getOptionValue(ACTION_PARAM));
-            }
-            GenericRoll roll = new BlacksadRoll(a, t, mods);
-            retVal = Optional.of(roll);
-        } 
-        catch (ParseException | NumberFormatException ex)
+        if (options.isHelp() || !(options instanceof BlacksadOptions) )
         {
             retVal = Optional.empty();
         }
+        else
+        {
+            BlacksadOptions opt = (BlacksadOptions) options;
+            BlacksadRoll roll = new BlacksadRoll(opt.getAction(), opt.getTension(), opt.getModifiers());
+            retVal = Optional.of(roll);
+        }
         return retVal;
     }
-    
+
     @Override
-    public ReturnMsg getHelpMessage(String cmdName)
+    public RpgSystemOptions buildOptions()
     {
-        return HelpWrapper.printHelp(cmdName, CMD_OPTIONS, true);
+        return new BlacksadOptions();
     }
     
 }
