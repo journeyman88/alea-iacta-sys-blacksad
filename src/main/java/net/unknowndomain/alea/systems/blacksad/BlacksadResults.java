@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -27,14 +28,14 @@ import net.unknowndomain.alea.roll.GenericResult;
  */
 public class BlacksadResults extends GenericResult
 {
-    private final List<Integer> actionResults;
-    private final List<Integer> tensionResults;
-    private final List<Integer> complimentaryResults;
+    private final List<SingleResult<Integer>> actionResults;
+    private final List<SingleResult<Integer>> tensionResults;
+    private final List<SingleResult<Integer>> complimentaryResults;
     private int successes = 0;
     
-    public BlacksadResults(List<Integer> actionResults, List<Integer> tensionResults, List<Integer> complimentaryResults)
+    public BlacksadResults(List<SingleResult<Integer>> actionResults, List<SingleResult<Integer>> tensionResults, List<SingleResult<Integer>> complimentaryResults)
     {
-        List<Integer> tmp = new ArrayList<>(actionResults.size());
+        List<SingleResult<Integer>> tmp = new ArrayList<>(actionResults.size());
         tmp.addAll(actionResults);
         this.actionResults = Collections.unmodifiableList(tmp);
         tmp = new ArrayList<>(tensionResults.size());
@@ -55,17 +56,17 @@ public class BlacksadResults extends GenericResult
         return successes;
     }
 
-    public List<Integer> getComplimentaryResults()
+    public List<SingleResult<Integer>> getComplimentaryResults()
     {
         return complimentaryResults;
     }
 
-    public List<Integer> getActionResults()
+    public List<SingleResult<Integer>> getActionResults()
     {
         return actionResults;
     }
 
-    public List<Integer> getTensionResults()
+    public List<SingleResult<Integer>> getTensionResults()
     {
         return tensionResults;
     }
@@ -81,27 +82,30 @@ public class BlacksadResults extends GenericResult
             if (!getActionResults().isEmpty())
             {
                 messageBuilder.append("Action Dice Results: ").append(" [ ");
-                for (Integer t : getActionResults())
+                for (SingleResult<Integer> t : getActionResults())
                 {
-                    messageBuilder.append(t).append(" ");
+                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                    messageBuilder.append(t.getValue()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }
             if (!getTensionResults().isEmpty())
             {
                 messageBuilder.append("Tension Dice Results: ").append(" [ ");
-                for (Integer t : getTensionResults())
+                for (SingleResult<Integer> t : getTensionResults())
                 {
-                    messageBuilder.append(t).append(" ");
+                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                    messageBuilder.append(t.getValue()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }
             if (!getComplimentaryResults().isEmpty())
             {
                 messageBuilder.append("Complimentary Dice Results: ").append(" [ ");
-                for (Integer t : getComplimentaryResults())
+                for (SingleResult<Integer> t : getComplimentaryResults())
                 {
-                    messageBuilder.append(t).append(" ");
+                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                    messageBuilder.append(t.getValue()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }

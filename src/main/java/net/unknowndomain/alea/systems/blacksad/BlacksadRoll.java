@@ -20,8 +20,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.unknowndomain.alea.dice.standard.D6;
-import net.unknowndomain.alea.pools.DicePool;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.SingleResultComparator;
+import net.unknowndomain.alea.random.dice.DicePool;
+import net.unknowndomain.alea.random.dice.bag.D6;
 import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
@@ -67,47 +69,39 @@ public class BlacksadRoll implements GenericRoll
     @Override
     public GenericResult getResult()
     {
-        List<Integer> actionRes = this.actionPool.getResults();
-        List<Integer> tensionRes = this.tensionPool.getResults();
-        List<Integer> complimentaryRes = this.complimentaryPool.getResults();
+        List<SingleResult<Integer>> actionRes = this.actionPool.getResults();
+        List<SingleResult<Integer>> tensionRes = this.tensionPool.getResults();
+        List<SingleResult<Integer>> complimentaryRes = this.complimentaryPool.getResults();
         BlacksadResults results = buildResults(actionRes, tensionRes, complimentaryRes);
         results.setVerbose(mods.contains(BlacksadModifiers.VERBOSE));
         return results;
     }
     
-    private BlacksadResults buildResults(List<Integer> actionRes, List<Integer> tensionRes, List<Integer> complimentaryRes)
+    private BlacksadResults buildResults(List<SingleResult<Integer>> actionRes, List<SingleResult<Integer>> tensionRes, List<SingleResult<Integer>> complimentaryRes)
     {
-        actionRes.sort((Integer o1, Integer o2) ->
-        {
-            return -1 * o1.compareTo(o2);
-        });
-        tensionRes.sort((Integer o1, Integer o2) ->
-        {
-            return -1 * o1.compareTo(o2);
-        });
-        actionRes.sort((Integer o1, Integer o2) ->
-        {
-            return -1 * o1.compareTo(o2);
-        });
+        SingleResultComparator<Integer> comp = new SingleResultComparator(true);
+        actionRes.sort(comp);
+        tensionRes.sort(comp);
+        actionRes.sort(comp);
         BlacksadResults results = new BlacksadResults(actionRes, tensionRes, complimentaryRes);
         int skipDice = 0;
-        for (Integer t : tensionRes)
+        for (SingleResult<Integer> t : tensionRes)
         {
-            if (t == 1)
+            if (t.getValue() == 1)
             {
                 skipDice++;
             }
         }
-        for (Integer c : complimentaryRes)
+        for (SingleResult<Integer> c : complimentaryRes)
         {
-            if (c == 1)
+            if (c.getValue() == 1)
             {
                 skipDice++;
             }
         }
-        for (Integer a : actionRes)
+        for (SingleResult<Integer> a : actionRes)
         {
-            if (a >= 4)
+            if (a.getValue() >= 4)
             {
                 if (skipDice <= 0)
                 {
@@ -119,14 +113,14 @@ public class BlacksadRoll implements GenericRoll
                 }
             }
         }
-        for (Integer t : tensionRes)
+        for (SingleResult<Integer> t : tensionRes)
         {
-            if (t >= 4)
+            if (t.getValue() >= 4)
             {
                 if (skipDice <= 0)
                 {
                     results.addSuccess();
-                    if (t >= 6)
+                    if (t.getValue() >= 6)
                     {
                         results.addSuccess();
                     }
@@ -137,9 +131,9 @@ public class BlacksadRoll implements GenericRoll
                 }
             }
         }
-        for (Integer c : complimentaryRes)
+        for (SingleResult<Integer> c : complimentaryRes)
         {
-            if (c >= 6)
+            if (c.getValue() >= 6)
             {
                 if (skipDice <= 0)
                 {
