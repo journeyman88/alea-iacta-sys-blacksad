@@ -20,14 +20,16 @@ import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.random.SingleResult;
-import net.unknowndomain.alea.roll.GenericResult;
+import net.unknowndomain.alea.roll.LocalizedResult;
 
 /**
  *
  * @author journeyman
  */
-public class BlacksadResults extends GenericResult
+public class BlacksadResults extends LocalizedResult
 {
+    private final static String BUNDLE_NAME = "net.unknowndomain.alea.systems.blacksad.RpgSystemBundle";
+    
     private final List<SingleResult<Integer>> actionResults;
     private final List<SingleResult<Integer>> tensionResults;
     private final List<SingleResult<Integer>> complimentaryResults;
@@ -75,13 +77,13 @@ public class BlacksadResults extends GenericResult
     protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
     {
         String indent = getIndent(indentValue);
-        messageBuilder.append("Successes: ").append(getSuccesses()).appendNewLine();
+        messageBuilder.append(translate("blacksad.results.successes", getSuccesses())).appendNewLine();
         if (verbose)
         {
             messageBuilder.append(indent).append("Roll ID: ").append(getUuid()).appendNewLine();
             if (!getActionResults().isEmpty())
             {
-                messageBuilder.append("Action Dice Results: ").append(" [ ");
+                messageBuilder.append(translate("blacksad.results.actionDice")).append(" [ ");
                 for (SingleResult<Integer> t : getActionResults())
                 {
                     messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -91,7 +93,7 @@ public class BlacksadResults extends GenericResult
             }
             if (!getTensionResults().isEmpty())
             {
-                messageBuilder.append("Tension Dice Results: ").append(" [ ");
+                messageBuilder.append(translate("blacksad.results.tensionDice")).append(" [ ");
                 for (SingleResult<Integer> t : getTensionResults())
                 {
                     messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -101,7 +103,7 @@ public class BlacksadResults extends GenericResult
             }
             if (!getComplimentaryResults().isEmpty())
             {
-                messageBuilder.append("Complimentary Dice Results: ").append(" [ ");
+                messageBuilder.append(translate("blacksad.results.complimentaryDice")).append(" [ ");
                 for (SingleResult<Integer> t : getComplimentaryResults())
                 {
                     messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -110,6 +112,12 @@ public class BlacksadResults extends GenericResult
                 messageBuilder.append("]").appendNewLine();
             }
         }
+    }
+
+    @Override
+    protected String getBundleName()
+    {
+        return BUNDLE_NAME;
     }
 
 }

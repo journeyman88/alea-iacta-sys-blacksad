@@ -61,7 +61,7 @@ public class BlacksadCommand extends RpgSystemCommand
         else
         {
             BlacksadOptions opt = (BlacksadOptions) options;
-            BlacksadRoll roll = new BlacksadRoll(opt.getAction(), opt.getTension(), opt.getModifiers());
+            BlacksadRoll roll = new BlacksadRoll(opt.getAction(), opt.getTension(), lang, opt.getModifiers());
             retVal = Optional.of(roll);
         }
         return retVal;

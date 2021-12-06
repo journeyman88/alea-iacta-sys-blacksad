@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.random.SingleResultComparator;
@@ -38,13 +39,14 @@ public class BlacksadRoll implements GenericRoll
     private final DicePool<D6> tensionPool;
     private final DicePool<D6> complimentaryPool;
     private final Set<BlacksadModifiers> mods;
+    private final Locale lang;
     
-    public BlacksadRoll(Integer action, Integer tension, BlacksadModifiers ... mod)
+    public BlacksadRoll(Integer action, Integer tension, Locale lang, BlacksadModifiers ... mod)
     {
-        this(action, tension, Arrays.asList(mod));
+        this(action, tension, lang, Arrays.asList(mod));
     }
     
-    public BlacksadRoll(Integer action, Integer tension, Collection<BlacksadModifiers> mod)
+    public BlacksadRoll(Integer action, Integer tension, Locale lang, Collection<BlacksadModifiers> mod)
     {
         int a = 0, t = 0;
         if (action != null)
@@ -64,6 +66,7 @@ public class BlacksadRoll implements GenericRoll
         this.tensionPool = new DicePool<>(D6.INSTANCE, t);
         int complimentary = (action + tension) >= 6 ? 0 : 6 - a - t;
         this.complimentaryPool = new DicePool<>(D6.INSTANCE, complimentary);
+        this.lang = lang;
     }
     
     @Override
@@ -74,6 +77,7 @@ public class BlacksadRoll implements GenericRoll
         List<SingleResult<Integer>> complimentaryRes = this.complimentaryPool.getResults();
         BlacksadResults results = buildResults(actionRes, tensionRes, complimentaryRes);
         results.setVerbose(mods.contains(BlacksadModifiers.VERBOSE));
+        results.setLang(lang);
         return results;
     }
     
