@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 journeyman.
+ * Copyright 2025 m.bignami.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.unknowndomain.alea.systems.blacksad;
 
-/**
- *
- * @author journeyman
- */
-public enum BlacksadModifiers
-{
-    VERBOSE
+module net.unknowndomain.alea.systems.blacksad {
+    requires net.unknowndomain.alea.core;
+    requires org.slf4j;
+    requires static lombok;
+    opens net.unknowndomain.alea.systems.blacksad to net.unknowndomain.alea.core;
+    provides net.unknowndomain.alea.systems.RpgSystemCommand with net.unknowndomain.alea.systems.blacksad.BlacksadCommand;
 }
