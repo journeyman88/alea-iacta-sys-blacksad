@@ -21,9 +21,9 @@ import net.unknowndomain.alea.systems.annotations.RpgSystemOption;
 public class BlacksadOptions extends RpgSystemOptions
 {
     @RpgSystemOption(name = "action", shortcode = "a", description = "blacksad.options.action", argName = "actionDice")
-    private Integer action;
+    Integer action;
     @RpgSystemOption(name = "tension", shortcode = "t", description = "blacksad.options.tension", argName = "tensionDice")
-    private Integer tension;
+    Integer tension;
                         
     @Override
     public boolean isValid()

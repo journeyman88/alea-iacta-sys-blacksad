@@ -91,21 +91,21 @@ public class BlacksadRoll implements GenericRoll
         int skipDice = 0;
         for (SingleResult<Integer> t : tensionRes)
         {
-            if (t.getValue() == 1)
+            if (t.value() == 1)
             {
                 skipDice++;
             }
         }
         for (SingleResult<Integer> c : complimentaryRes)
         {
-            if (c.getValue() == 1)
+            if (c.value() == 1)
             {
                 skipDice++;
             }
         }
         for (SingleResult<Integer> a : actionRes)
         {
-            if (a.getValue() >= 4)
+            if (a.value() >= 4)
             {
                 if (skipDice <= 0)
                 {
@@ -119,12 +119,12 @@ public class BlacksadRoll implements GenericRoll
         }
         for (SingleResult<Integer> t : tensionRes)
         {
-            if (t.getValue() >= 4)
+            if (t.value() >= 4)
             {
                 if (skipDice <= 0)
                 {
                     results.addSuccess();
-                    if (t.getValue() >= 6)
+                    if (t.value() >= 6)
                     {
                         results.addSuccess();
                     }
@@ -137,7 +137,7 @@ public class BlacksadRoll implements GenericRoll
         }
         for (SingleResult<Integer> c : complimentaryRes)
         {
-            if (c.getValue() >= 6)
+            if (c.value() >= 6)
             {
                 if (skipDice <= 0)
                 {

@@ -20,4 +20,5 @@ module net.unknowndomain.alea.systems.blacksad {
     requires static lombok;
     opens net.unknowndomain.alea.systems.blacksad to net.unknowndomain.alea.core;
     provides net.unknowndomain.alea.systems.RpgSystemCommand with net.unknowndomain.alea.systems.blacksad.BlacksadCommand;
+    provides net.unknowndomain.alea.systems.results.ResultCodec with net.unknowndomain.alea.systems.blacksad.BlacksadResultsCodec;
 }

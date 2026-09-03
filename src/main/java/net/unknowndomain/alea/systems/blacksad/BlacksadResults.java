@@ -21,19 +21,21 @@ import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.LocalizedResult;
+import net.unknowndomain.alea.systems.annotations.RpgSystemResult;
 
 /**
  *
  * @author journeyman
  */
+@RpgSystemResult(typeId = "blacksad")
 public class BlacksadResults extends LocalizedResult
 {
     private final static String BUNDLE_NAME = "net.unknowndomain.alea.systems.blacksad.RpgSystemBundle";
-    
-    private final List<SingleResult<Integer>> actionResults;
-    private final List<SingleResult<Integer>> tensionResults;
-    private final List<SingleResult<Integer>> complimentaryResults;
-    private int successes = 0;
+
+    final List<SingleResult<Integer>> actionResults;
+    final List<SingleResult<Integer>> tensionResults;
+    final List<SingleResult<Integer>> complimentaryResults;
+    int successes = 0;
     
     public BlacksadResults(List<SingleResult<Integer>> actionResults, List<SingleResult<Integer>> tensionResults, List<SingleResult<Integer>> complimentaryResults)
     {
@@ -86,8 +88,8 @@ public class BlacksadResults extends LocalizedResult
                 messageBuilder.append(translate("blacksad.results.actionDice")).append(" [ ");
                 for (SingleResult<Integer> t : getActionResults())
                 {
-                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
-                    messageBuilder.append(t.getValue()).append(") ");
+                    messageBuilder.append("( ").append(t.label()).append(" => ");
+                    messageBuilder.append(t.value()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }
@@ -96,8 +98,8 @@ public class BlacksadResults extends LocalizedResult
                 messageBuilder.append(translate("blacksad.results.tensionDice")).append(" [ ");
                 for (SingleResult<Integer> t : getTensionResults())
                 {
-                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
-                    messageBuilder.append(t.getValue()).append(") ");
+                    messageBuilder.append("( ").append(t.label()).append(" => ");
+                    messageBuilder.append(t.value()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }
@@ -106,8 +108,8 @@ public class BlacksadResults extends LocalizedResult
                 messageBuilder.append(translate("blacksad.results.complimentaryDice")).append(" [ ");
                 for (SingleResult<Integer> t : getComplimentaryResults())
                 {
-                    messageBuilder.append("( ").append(t.getLabel()).append(" => ");
-                    messageBuilder.append(t.getValue()).append(") ");
+                    messageBuilder.append("( ").append(t.label()).append(" => ");
+                    messageBuilder.append(t.value()).append(") ");
                 }
                 messageBuilder.append("]").appendNewLine();
             }
@@ -118,6 +120,11 @@ public class BlacksadResults extends LocalizedResult
     protected String getBundleName()
     {
         return BUNDLE_NAME;
+    }
+
+    void restoreUuid(String uuid)
+    {
+        setUuid(uuid);
     }
 
 }
